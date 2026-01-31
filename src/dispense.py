@@ -5,6 +5,9 @@ class DispenseEvent:
 
     """
 
+    # Assume the below is a dictionary including the max dosages for all medications in the form of 'medication_name':'maximum_dosage'
+    MEDICATION_MAX_DOSAGE = {}
+
     # TODO Task 3: Encode and enforce input constraints (e.g., valid dose, quantity, identifiers)
     def __init__(self, patient_id, medication, dose_mg, quantity):
         """
@@ -31,6 +34,9 @@ class DispenseEvent:
         elif dose_mg <=0:
             raise ValueError("Quantity must be a positive integer")
         self.quantity = quantity
+
+        if dose_mg * quantity > MEDICATION_MAX_DOSAGE[self.medication]:
+            raise ValueError(f"Medication exceeds maximum dosage value of {MEDICATION_MAX_DOSAGE[self.medication]}")
             
 
     # TODO Task 4: Define and check system invariants 
