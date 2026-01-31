@@ -12,8 +12,12 @@ class DispenseEvent:
         'vyvanse':75
     }
 
+    # My reasoning for date being obtained on the dispense event instead of as an argument is that
+    # In the real world, an actual dispensing machine would simply use its current date as the date
+    # of the event as opposed to an argument from anywhere else
+    # However for testing purposes I need to add an argument
     # TODO Task 3: Encode and enforce input constraints (e.g., valid dose, quantity, identifiers)
-    def __init__(self, patient_id, medication, dose_mg, quantity):
+    def __init__(self, patient_id, medication, dose_mg, quantity, date=date.today()):
         """
         Initialize a new DispenseEvent.
 
@@ -25,26 +29,24 @@ class DispenseEvent:
 
         """
         self.patient_id = patient_id
-        self.medication = medication
-        #My reasoning for date being obtained on the dispense event instead of as an argument is that
-        #In the real world, an actual dispensing machine would simply use its current date as the date
-        #of the event as opposed to an argument from anywhere else
-        self.date = date.today()
+        self.medication = medication.lower()
+
+        self.date = date
         
         if not isinstance(dose_mg, (int,float)):
-            raise ValueError("Dosage in milligrams must be a numerical value")
+            raise TypeError("Dosage in milligrams must be a numerical value")
         elif dose_mg <=0:
             raise ValueError("Dosage must be a positive number")
         self.dose_mg = dose_mg
         
         if not isinstance(quantity, int):
-            raise ValueError("Quantity must be an integer")
-        elif dose_mg <=0:
+            raise TypeError("Quantity must be an integer")
+        elif quantity <=0:
             raise ValueError("Quantity must be a positive integer")
         self.quantity = quantity
 
-        if dose_mg * quantity > MEDICATION_MAX_DOSAGE[self.medication]:
-            raise ValueError(f"Medication exceeds maximum dosage value of {MEDICATION_MAX_DOSAGE[self.medication]}")
+        if dose_mg * quantity > self.MEDICATION_MAX_DOSAGE[self.medication]:
+            raise ValueError(f"Medication exceeds maximum dosage value of {self.MEDICATION_MAX_DOSAGE[self.medication]}")
 
         
             
@@ -66,7 +68,7 @@ class DispenseEvent:
             return False
 
         for event in existing_events:
-            if event.patient_id == new_event.patient_id & event.medication_id == new_event.medication_id & event.date == new_event.date:
+            if event.patient_id == new_event.patient_id and event.medication == new_event.medication and event.date == new_event.date:
                 return False
 
         return True
