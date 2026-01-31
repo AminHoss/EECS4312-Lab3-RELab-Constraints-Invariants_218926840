@@ -7,8 +7,10 @@ class DispenseEvent:
 
     """
 
-    # Assume the below is a dictionary including the max dosages for all medications in the form of 'medication_name':'maximum_dosage'
-    MEDICATION_MAX_DOSAGE = {}
+    # Assume the below is a dictionary including the max dosages for all medications in the form of 'medication_name':'maximum_dosage in mgs'
+    MEDICATION_MAX_DOSAGE = {
+        'vyvanse':75
+    }
 
     # TODO Task 3: Encode and enforce input constraints (e.g., valid dose, quantity, identifiers)
     def __init__(self, patient_id, medication, dose_mg, quantity):
